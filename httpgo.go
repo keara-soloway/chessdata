@@ -208,6 +208,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	http.HandleFunc("/httpgo/payload", PayloadHandler)
 	http.HandleFunc("/payload", PayloadHandler)
 	http.HandleFunc("/", RequestHandler)
 	if Config.ServerKey != "" && Config.ServerCrt != "" {
