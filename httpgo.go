@@ -65,6 +65,12 @@ func genRecords(size string) ([]Record, error) {
 	if err != nil {
 		return nil, err
 	}
+	if suffix == "MB" {
+		total *= 1024
+	}
+	if suffix == "BB" {
+		total *= 1024 * 1024
+	}
 	records = genNRecords(total)
 	return records, nil
 }
