@@ -192,7 +192,7 @@ func parseConfig(configFile string) error {
 // helper function to return version string of the server
 func info() string {
 	goVersion := runtime.Version()
-	tstamp := time.Now().Format("2006-02-01")
+	tstamp := time.Now().Format("2006-01-02")
 	return fmt.Sprintf("httpgo git=%s go=%s date=%s", version, goVersion, tstamp)
 }
 
