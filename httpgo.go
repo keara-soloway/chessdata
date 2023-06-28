@@ -170,6 +170,26 @@ func RequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// SearchHandler handles search selectors POST-ed as JSON
+func SearchHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("SearchHandler")
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		HTTPError("ERROR", "requests to /search must use the POST method", w)
+		return
+	}
+	defer r.Body.Close()
+	var selectors struct{}
+	err := json.NewDecoder(r.Body).Decode(&selectors)
+	if err != nil {
+		HTTPError("ERROR", "Cannot decode body of request as JSON", w)
+		return
+	}
+	log.Println(selectors)
+	w.WriteHeader(http.StatusOK)
+	return
+}
+
 // helper function to parse the config
 func parseConfig(configFile string) error {
 	if configFile == "" {
@@ -217,6 +237,9 @@ func main() {
 	http.HandleFunc("/httpgo/payload", PayloadHandler)
 	http.HandleFunc("/payload", PayloadHandler)
 	http.HandleFunc("/", RequestHandler)
+
+	http.HandleFunc("/search", SearchHandler)
+
 	if Config.ServerKey != "" && Config.ServerCrt != "" {
 		server := &http.Server{
 			Addr: fmt.Sprintf(":%d", Config.Port),
